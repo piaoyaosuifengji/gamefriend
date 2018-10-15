@@ -1,0 +1,131 @@
+
+python3 manage.py runserver
+
+
+
+
+提交更新：
+ git commit -a -m "20181015： init "
+git push origin master
+git push origin  ver1:ver1
+git push origin  ver2:ver2
+添加文件到库，并上传
+$ git add .     提交所有文件
+git add readme.txt
+git commit   -m "give a new file"
+git push origin master
+git push origin ver0.1803:ver0.1803
+显示所有分支
+	 git branch -v
+创建一个新的分支
+	git branch ver0.1801
+要切换到其他分支
+
+	git checkout ver1
+
+要新建并切换到该分支
+	git checkout -b iss53
+将分支testing合并到master
+	git checkout master
+	git merge ver0.1702
+push本地分支代码到远端服务器,如果没有就创建该分支
+	 git push origin  testing
+删除分支
+	git branch -d testing
+查看本地分支
+	git branch
+查看远程分支
+	git branch --remote
+获取远程分支
+	/////git pull origin master:ver0.14
+	已经克隆下来整个项目后你本地其实已经有所有分支的数据了，只是没有本地分支而已
+	git checkout -t origin/ver0.15
+	git checkout -t origin/master
+查看远程和本地所有分支，用-a参数
+	git branch -a
+如拉取远程的master分支到本地wy分支：（更新本地分支）
+git pull origin master:wy	
+git pull origin master:master	
+删除远程分支
+	git push origin --delete testing
+	git push origin :ver0.1702
+提交分支数据到远程服务器
+	git push origin <local_branch_name>:<remote_branch_name>
+	git push origin ver0.1701:ver0.1701
+
+	git push origin <local_branch_name>:<remote_branch_name>
+	git push origin  ver0.1701:ver0.1701
+	git push origin master
+列出版本库中所有已删除的文件
+	git log --diff-filter=D --summary
+
+
+	git pull origin ver0.1701:ver0.1701
+	git pull origin master:ver0.1701
+	git pull origin master:libuv-io
+
+
+Git怎么查看某次提交某个文件的修改
+git 看某次commit改了哪些文件
+git log 查看commit的历史
+git show <commit-hash-id>查看某次commit的修改内容
+git log -p <filename>查看某个文件的修改历史
+git log -p -2查看最近2次的更新内容
+
+
+
+ axel -n 100
+aria2c -j 100 -s 10 -x 15
+
+
+
+重新配置git：
+ ssh-keygen -t rsa -C "piaoyaosuifengji@sina.com"
+git config --global user.email "piaoyaosuifengji@sina.com"
+git config --global user.name "piaoyaosuifengji"
+
+
+ 
+添加ssh公钥后重新配置code：
+ ssh-keygen  -T git@git.coding.net  
+
+
+一开始用：下载项目
+git clone https://github.com/piaoyaosuifengji/NERO2.git
+git clone https://github.com/piaoyaosuifengji/scrapyMyPage
+.git
+git clone https://github.com/piaoyaosuifengji/mysiteForTranslte.git
+git clone https://github.com/chromium/chromium.git
+
+查看clone 地址：git remote -v
+移除https的方式，换成 ssh方式：
+git remote set-url origin git@github.com:piaoyaosuifengji/feiqi.git
+		修改方式：
+		git remote set-url origin [ssh的url] 
+
+  
+ 
+搜索
+
+ 然后，这样就不需要密码了
+ git remote add origin git@github.com:piaoyaosuifengji/mysiteForTranslte.git
+ git remote add origin git@github.com:piaoyaosuifengji/NERO2.git
+
+
+
+
+#添加文件脚本：
+git add *
+git commit  -a -m "begin:"
+
+git push origin master
+
+ 
+
+
+grep -rn "Create vector of fbank centre frequencies" *
+
+
+
+
+
