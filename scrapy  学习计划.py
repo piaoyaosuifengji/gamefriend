@@ -16,10 +16,6 @@
         b：不重复的就写入本地存储，并生成一个新的增量数据列表---这是你需要阅读的文章
             将  增量数据列表  生成一个csv 文件（或者其他的），方便以后生成html，进行阅读
 
-
-
-
-
     终极目标：看看是否能够利用 scrapy 抓取各种 web 翻译的信息  ----其实有点舍本逐末了
 
 
@@ -40,12 +36,13 @@
 
 
 
-
+# 查看版本：
+scrapy -v
 
 # 创建一个 scrapy 项目
                         
 scrapy startproject mingyan
-scrapy startproject mingyan
+scrapy startproject test1
 
 
 
@@ -53,6 +50,7 @@ scrapy startproject mingyan
 
 # 假设你已经写了一个爬虫类了，运行方法：
 scrapy crawl quotes
+scrapy crawl spiderForShortPageMsg
 # 将数据放入文件中
 scrapy crawl quotes -o quotes.json
 # 出于历史原因，输出时，Scrapy将一个给定的文件进行数据的附加  而不是覆盖其内容。如果您在第二次运行该命令两次而没有在第二次之前删除该文件，那么最终会得到一个损坏的JSON文件。
