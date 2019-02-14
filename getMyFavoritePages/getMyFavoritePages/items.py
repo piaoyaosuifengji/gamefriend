@@ -10,5 +10,11 @@ import scrapy
 
 class GetmyfavoritepagesItem(scrapy.Item):
     # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    title = scrapy.Field()
+    website = scrapy.Field()            #主站
+    url = scrapy.Field()                #具体url  
+    language = scrapy.Field()           # 
+    language = scrapy.Field()           # 
+    
+    
+     

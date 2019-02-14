@@ -17,8 +17,8 @@ class AuthorSpider(scrapy.Spider):
     ]
     #系统会自动过滤掉访问过的页面： DUPEFILTER_CLASS  类中可以设置该选项 
     def parse(self, response):
-        logging.warning("parse : current url is:"+response.url  )
-        logging.warning("\n" )
+        # logging.warning("parse : current url is:"+response.url  )
+        # logging.warning("\n" )
 
 
         
@@ -27,12 +27,7 @@ class AuthorSpider(scrapy.Spider):
         #     yield response.follow(href, self.parse_author)
         #     print(href)
 
-        # response.xpath('//div[@id="images"]').css('img')
-        # for href in response.css('.(link h-cite u-repost-of) + a::attr(href)'):
-        # for href in response.xpath('//div[@class=link h-cite u-repost-of]').css('a'): 
-        # for href in response.xpath('//ol/div//a'):  #https://lobste.rs/
-        # for href in response.xpath('//article//a/text()'):     #https://readwrite.com/
-
+ 
         if response.url == "https://readwrite.com/":
             # for href in response.xpath('//h2/a'):
             # or :
@@ -76,27 +71,43 @@ class AuthorSpider(scrapy.Spider):
             #     }
             pass
         elif response.url == "https://dzone.com/":
-            for href in response.xpath("//li[@class='col-md-3 column col-sm-4 col-xs-6']/div[@class='titles']"):     #   ok
-                for tmpDiv in href.xpath("./div/h3/a"):     #   ok
-                    yield {
-                        'text': tmpDiv.css('a::text').extract_first(),
-                        'href': tmpDiv.css('a::attr(ng-href)').extract_first(),
-                    }
-                    pass
-                for tmpDiv in href.xpath("./h3/a"):     #   ok
-                    yield {
-                        'text': tmpDiv.css('a::text').extract_first(),
-                        'href': tmpDiv.css('a::attr(ng-href)').extract_first(),
-                    }
-                    pass
+
+            yield response.follow(response.url, self.parse_dzone_com)
 
 
 
 
 
 
+    def parse_dzone_com(self, response):
+
+        # logging.warning("parse : current url is:"+response.url  )
+        logging.debug("parse : current url is:"+response.url  )
+
+        for href in response.xpath("//li[@class='col-md-3 column col-sm-4 col-xs-6']/div[@class='titles']"):     #   ok
+            for tmpDiv in href.xpath("./div/h3/a"):     #   ok
+                yield {
+                    'text': tmpDiv.css('a::text').extract_first(),
+                    'href': tmpDiv.css('a::attr(ng-href)').extract_first(),
+                }
+                pass
+            for tmpDiv in href.xpath("./h3/a"):     #   ok
+                yield {
+                    'text': tmpDiv.css('a::text').extract_first(),
+                    'href': tmpDiv.css('a::attr(ng-href)').extract_first(),
+                }
+                pass
 
 
+
+        # def extract_with_css(query):
+        #     return response.css(query).extract_first().strip()
+
+        # yield {
+        #     'name': extract_with_css('h3.author-title::text'),
+        #     'birthdate': extract_with_css('.author-born-date::text'),
+        #     'bio': extract_with_css('.author-description::text'),
+        # }      
 
 
 

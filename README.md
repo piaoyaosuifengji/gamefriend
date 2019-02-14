@@ -14,6 +14,16 @@ print sys.path
   <!-- 添加python3的路径   file->首选项->settings->在“python.pythonPath”中写入 -->
 
 
+抓取项目怎么安排呢？
+    1：先把数据抓取下来再说？
+    2：再进行翻译？
+
+
+
+
+
+
+
 
 
 
@@ -21,6 +31,7 @@ print sys.path
  ai python3-scapy
 
 <!-- # 创建一个 scrapy 项目 -->
+在目录：/home/jty/git/scrapyMyPage/getMyFavoritePages
 scrapy startproject getMyFavoritePages
 
 
