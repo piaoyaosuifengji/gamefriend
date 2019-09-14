@@ -42,7 +42,7 @@ scrapy -v
 # 创建一个 scrapy 项目
                         
 scrapy startproject mingyan
-scrapy startproject test1
+scrapy startproject getMyFavoritePages
 
 
 

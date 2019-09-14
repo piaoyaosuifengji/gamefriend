@@ -1,6 +1,16 @@
-#!/usr/lib/python3.6
+#! python3
+# -- coding: utf-8
 import scrapy
 import logging
+import re
+
+from scrapy.http import Request
+from getMyFavoritePages.items import GetmyfavoritepagesItem,initFavoritePageItem
+# from jobboleSpider.utils.common import get_md5
+# import datetime
+# from scrapy.loader import ItemLoader
+
+# from boilerpipe.extract import Extractor
 
 class AuthorSpider(scrapy.Spider):
     #  class scrapy.spiders.CrawlSpider  是另外通用的爬虫类
@@ -8,11 +18,11 @@ class AuthorSpider(scrapy.Spider):
 
 
     start_urls = [ 
-        'https://lobste.rs/',
-        'https://readwrite.com/',
-        'https://news.ycombinator.com/',
-        'https://www.ostechnix.com/',
-        'https://www.infoworld.com/',
+        # 'https://lobste.rs/',
+        # 'https://readwrite.com/',
+        # 'https://news.ycombinator.com/',
+        # 'https://www.ostechnix.com/',
+        # 'https://www.infoworld.com/',
         'https://dzone.com/',
     ]
     #系统会自动过滤掉访问过的页面： DUPEFILTER_CLASS  类中可以设置该选项 
@@ -76,6 +86,83 @@ class AuthorSpider(scrapy.Spider):
 
 
 
+    def atricalClean(self, str_):
+        
+
+        tmpstr =str_
+
+        
+        def isDirty(tmpstr):
+            start = tmpstr.find('<')
+            end = tmpstr.find('>')
+            # print(start)
+            # print(end)
+            if start != -1 and end != -1 and end > start:
+                return 1
+            return 0
+
+        while isDirty(tmpstr) == 1:
+            # print("isDirty: ")
+            start = tmpstr.find('<')
+            end = tmpstr.find('>')
+            dropStr = tmpstr[start:end +1]
+            tmpstr = tmpstr.replace(dropStr, "",1)
+
+
+        tmpList = ["\\xa0",
+                    "\\n",
+                    # "\\n",
+                    ]
+        for i in range(len(tmpList)):
+            if tmpList[i] == "\\n":
+                tmpstr=tmpstr.replace(tmpList[i], '\n')
+            else:
+                tmpstr=tmpstr.replace(tmpList[i], " " )
+        start = 2
+        # end = len(tmpstr) 
+        tmpstr=tmpstr[start:-2]
+        return tmpstr
+
+    def parse_dzone_com_artical(self, response):
+
+        # print("parse_dzone_com_artical: start ")
+
+        # for href in response.xpath("//li[@class='col-md-3 column col-sm-4 col-xs-6']/div[@class='titles']"):     #   ok
+        pageItem  = initFavoritePageItem()
+        # page['title'] = ""
+        # page['website'] = ""
+        pageItem['url'] =  response.url
+        # page['language'] = ""
+        # page['readFlag'] = ""
+        # page['PublicationDate'] = ""
+
+        # print(pageItem['url'])
+
+
+        hObj = response.xpath("//h1[@class='article-title']")[0] 
+        # titleStr = 
+        # pageItem['title'] = titleStr.strip()
+        pageItem['title'] = hObj.css('::text').get().strip()
+        
+        articalNode = response.xpath("//div[@class='content-html']")[0]
+        for href in articalNode.xpath("./*") :     #   ok
+
+            
+            # print( href.xpath('./*/text()').get() )
+            
+            # print( href.xpath('./text()').get() )
+            # 打印节点的html代码
+            # print( href.getall())
+            # print( re.sub("<*>", "", href.getall(), count=0) )
+
+            # print( href.getall())
+            strs1  = self.atricalClean(  str( href.getall()))
+            
+            # strs11 = "".join(strs1.split())
+            print( strs1)
+            
+
+        yield pageItem
 
 
 
@@ -86,29 +173,51 @@ class AuthorSpider(scrapy.Spider):
 
         for href in response.xpath("//li[@class='col-md-3 column col-sm-4 col-xs-6']/div[@class='titles']"):     #   ok
             for tmpDiv in href.xpath("./div/h3/a"):     #   ok
-                yield {
-                    'text': tmpDiv.css('a::text').extract_first(),
-                    'href': tmpDiv.css('a::attr(ng-href)').extract_first(),
-                }
+
+                pageItem  = initFavoritePageItem()
+                # page['title'] = ""
+                # page['website'] = ""
+                pageItem['url'] =  "https://dzone.com"+tmpDiv.css('a::attr(ng-href)').extract_first()
+                # page['language'] = ""
+                # page['readFlag'] = ""
+                # page['PublicationDate'] = ""
+
+                # print(pageItem['url'])
+                pageItem['title'] = tmpDiv.css('a::text').extract_first()
+
+
+                # yield {
+                #     'text': tmpDiv.css('a::text').extract_first(),
+                #     'href': tmpDiv.css('a::attr(ng-href)').extract_first(),
+                # }
+                # yield pageItem
+
+
+                if pageItem['url'] == "https://dzone.com/articles/the-6-best-slack-alternatives-for-effective-projec":
+                    yield response.follow(pageItem['url'], self.parse_dzone_com_artical)
+
+
                 pass
             for tmpDiv in href.xpath("./h3/a"):     #   ok
-                yield {
-                    'text': tmpDiv.css('a::text').extract_first(),
-                    'href': tmpDiv.css('a::attr(ng-href)').extract_first(),
-                }
-                pass
+                # yield {
+                #     'text': tmpDiv.css('a::text').extract_first(),
+                #     'href': tmpDiv.css('a::attr(ng-href)').extract_first(),
+                # }
+                # pass
+                pageItem  = initFavoritePageItem()
+                # page['title'] = ""
+                # page['website'] = ""
+                pageItem['url'] =  "https://dzone.com"+tmpDiv.css('a::attr(ng-href)').extract_first()
+                # page['language'] = ""
+                # page['readFlag'] = ""
+                # page['PublicationDate'] = ""
 
+                pageItem['title'] = tmpDiv.css('a::text').extract_first()
+                # yield pageItem
+                if pageItem['url'] == "https://dzone.com/articles/multi-team-backlog-refinement":
+                    yield response.follow(pageItem['url'], self.parse_dzone_com_artical)
 
-
-        # def extract_with_css(query):
-        #     return response.css(query).extract_first().strip()
-
-        # yield {
-        #     'name': extract_with_css('h3.author-title::text'),
-        #     'birthdate': extract_with_css('.author-born-date::text'),
-        #     'bio': extract_with_css('.author-description::text'),
-        # }      
-
+ 
 
 
     def parse_author(self, response):
